@@ -4,7 +4,7 @@
 ///
 /// This is a C-style struct since its memory layout should be fixed
 #[repr(C)]
-struct Counter_Registers {
+struct CounterRegisters {
     cr: u32, // Control register
     sr: u32, // Status register
     vr: u32, // Value register
@@ -20,14 +20,14 @@ struct Counter_Registers {
 ///
 /// Furthermore the const generic `ADDRESS` is used to specify it's base address at compile time
 pub struct Counter<const ADDRESS: u32> {
-    reg: &'static mut Counter_Registers,
+    reg: &'static mut CounterRegisters,
 }
 
-impl <const A: u32> Counter<A> {
+impl<const A: u32> Counter<A> {
     /// Create a new counter with a fixed base address
-    pub fn new() -> Self{
+    pub fn new() -> Self {
         Counter {
-            reg: unsafe { &mut *(A as *mut Counter_Registers) },
+            reg: unsafe { &mut *(A as *mut CounterRegisters) },
         }
     }
 
@@ -56,7 +56,7 @@ impl <const A: u32> Counter<A> {
     }
 
     /// Set `control_reg`'s value
-    pub fn set_control_reg(&mut self, value: u32) -> () {
+    pub fn set_control_reg(&mut self, value: u32) {
         unsafe {
             let cr_p: *mut u32 = &mut (self.reg.cr); // Take mutable pointer to command register
             cr_p.write_volatile(value) // Write to pointer
